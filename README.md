@@ -8,7 +8,7 @@ Prerequisites
 
 Some prior experience with R is recommended and expected. Familiairty with basic statistical concepts such as regression and hypothesis testing is useful. Because causal inference relies on certain assumptions, basic familiarity with statistics and probability is expected. 
 
-Check this workshop's learning path to figure out whcih pre-requisite topics are necessary for this workshop series. 
+Check this workshop's learning path to figure out whichh pre-requisite topics are necessary for this workshop series. 
 ---
 Workshop Goals 
 
