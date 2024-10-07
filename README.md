@@ -16,7 +16,7 @@ Workshop Goals
 
 This two-part interactive workshop introduces participants to both causal inference using observational data and machine learning techniques to estimate treatment effects. The workshop is divided into two days: 
 
-Day 1: Establishes causal inference concepts, with a focus on traditional statistical methods including matching, propensity-score mehtods, and instrumental variables. 
+Day 1: Establishes causal inference concepts, with a focus on traditional statistical methods including matching, propensity-score methods, and instrumental variables. 
 Day 2: Applies machine learning techniques, primarily causal trees and causal forests, to model heterogeneous treatment effects. 
 
 --- 
