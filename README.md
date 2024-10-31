@@ -11,7 +11,7 @@ Some prior experience with R is recommended and expected. Familiairty with basic
 Check this workshop's learning path to figure out whichh pre-requisite topics are necessary for this workshop series. 
 
 ---
-Workshop Goals 
+Workshop Goals
 --- 
 
 This interactive workshop spans two days, focusing on causal inference using observational data and machine learning methods to model heterogeneous treatment effects.
