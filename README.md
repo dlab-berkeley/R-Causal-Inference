@@ -77,23 +77,13 @@ Now that you have all the required software and materials, you need to run the c
 
 # Additional Resources
 
-Check out the following online resources to learn more about R:
+Check out the following online resources to learn more about causal inference:
 
--   [Software Carpentry](https://swcarpentry.github.io/)
--   [Quick-R](http://statmethods.net/)
--   [UCLA Institute for Digital Research and Education](https://stats.idre.ucla.edu/r/)
--   [R-bloggers](https://www.r-bloggers.com/)
--   [R Markdown: The Definitive Guide](https://bookdown.org/yihui/rmarkdown/)
--   [The tidyverse style guide](http://style.tidyverse.org/)
-
-as well as the following books:
-
--   [Bookdown Featured Books](https://bookdown.org/)
--   [Introduction to Probability and Statistics in R](http://www.atmos.albany.edu/facstaff/timm/ATM315spring14/R/IPSUR.pdf) by G. Jay Kearns.
--   [Advanced R](http://adv-r.had.co.nz/) by Hadley Wickham.
--   [R for Data Science](http://r4ds.had.co.nz/) by Hadley Wickham and Garrett Grolemund.
--   [R for Everyone](http://www.jaredlander.com/r-for-everyone/) by Jared Lander.
--   [Art of R Programming](https://www.nostarch.com/artofr.htm) by Norman Matloff.
+- [The Book of Why](https://bayes.cs.ucla.edu/WHY/) by Judea Pearl: This popular book provides an accessible introduction to causal inference concepts.
+- [Causal Inference for the Brave and True](https://matheusfacure.github.io/python-causality-handbook/landing-page.html): This free online book by Matheus Facure offers an intuitive introduction to causal inference with Python and R examples.
+- [Causal Inference: What If](https://www.hsph.harvard.edu/miguel-hernan/causal-inference-book/) by Hernán and Robins: Often referred to as the “bible of causal inference,” this free online textbook is a comprehensive reference for causal inference concepts. 
+- [Causal Inference with R](https://campus.datacamp.com/courses/causal-inference-with-r-regression/regressions-1-introduction-to-regression-as-causality?ex=1): Hosted on DataCamp, this interactive course teaches causal inference methods using R with practical coding exercises.
+- [MIT's Causal Inference Course](https://ocw.mit.edu/courses/6-s897-machine-learning-for-healthcare-spring-2019/resources/lecture-14-causal-inference-part-1/): This lecture by David Sontag at MIT discusses causal inference, examples of causal questions, and how these guide treatment decisions. He explains the Rubin-Neyman causal model as a potential outcome framework.
 
 # About the UC Berkeley D-Lab
 
