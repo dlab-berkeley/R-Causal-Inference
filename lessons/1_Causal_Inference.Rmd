@@ -1,0 +1,293 @@
+---
+title: "Causal Inference Workshop"
+output:
+  html_document
+---
+
+# Learning Objectives
+
+1.  Understand the conceptual framework of **causal inference**, including
+
+    1.  Potential Outcomes Framework
+
+    2.  Stable Unit Treatment Value Assumption (SUTVA)
+
+    3.  Assignment Mechanism
+
+2.  Recognize observational data limitations and strategies to address them
+
+3.  Apply causal inference methods like propensity score matching (PSM) and instrumental variables (IV) across datasets.
+
+4.  Implement real-world applications with existing observational datasets.
+
+------------------------------------------------------------------------
+
+Throughout this workshop series, we will use the following icons:
+
+🔔 **Question**: A quick question to help you understand what's going on.
+
+🥊 **Challenge**: Interactive exercise. We'll go through these in the workshop!
+
+⚠️ **Warning**: Heads-up about tricky stuff or common mistakes.
+
+💡 **Tip**: How to do something a bit more efficiently or effectively.
+
+📝 **Poll**: A zoom poll to help you learn.
+
+🎬 **Demo**: Showing off something more advanced so you know what you can use R for in the future.
+
+------------------------------------------------------------------------
+
+# Introduction
+
+Welcome to the **Causal Inference Workshop**! This notebook explores fundamental causal inference concepts, focusing on confounding, selection bias, and essential causal inference methods.
+
+Causal inference is the study of cause-and-effect relationships, enabling researchers to determine whether and how a treatment or intervention influences an outcome.
+
+With the growing reliance on observational data and complex models, such as AI and machine learning, the potential for biases and hidden assumptions impacting causal interpretations has increased.
+
+This workshop aims to equip you with foundational skills in causal inference, helping you critically engage with data-driven conclusions in fields like policy, healthcare, and social sciences.
+
+# 📊 Dataset Descriptions
+
+### 1️⃣ Lalonde Dataset
+
+**Context**: Evaluates the National Supported Work (NSW) Demonstration, a job training program.
+
+-   **Treatment**: Participation in the job training program.
+-   **Outcome**: Post-program earnings (`re78`).
+-   **Covariates**: Age, education, race, pre-program earnings (`re74`, `re75`).
+
+### 2️⃣ NHANES Dataset
+
+**Context**: NHANES assesses health and nutrition. We explore physical activity's effect on blood pressure.
+
+-   **Treatment**: Regular physical activity (`PhysActive`).
+-   **Outcome**: Systolic blood pressure (`BPXSY1`).
+-   **Covariates**: Age, income, and BMI.
+
+### 3️⃣ PSID Dataset
+
+**Context**: PSID follows U.S. families over time, often used to study intergenerational effects.
+
+-   **Treatment**: Parental education level (`parent_education`).
+-   **Outcome**: Child education level (`child_education`).
+-   **Covariates**: Household income and neighborhood quality.
+
+
+------------------------------------------------------------------------
+
+## Key Concept 1: Potential Outcomes Framework
+
+The **Potential Outcomes Framework** defines causal effects by imagining the possible outcomes for each individual under different conditions, asking "what if" scenarios where only one outcome is actually observed. The difference between these potential outcomes, 𝑌 ( 1 ) − 𝑌 ( 0 ) Y(1)−Y(0), represents the individual treatment effect.
+
+**Counterfactual Reasoning**: Essentially 'what if' scenarios. Only one outcome is observed. The difference **Y(1) - Y(0)** is the individual treatment effect.
+
+The Potential Outcomes Framework isn’t just theoretical—it has practical applications in evaluating policies and interventions. For example, in public policy, researchers use this framework to understand the effect of programs like job training on employment outcomes or health initiatives on population well-being. By calculating potential outcomes, researchers can assess whether observed changes are due to the intervention or influenced by other factors.
+
+### 🥊 Challenge 1: Potential Outcomes with Lalonde Dataset
+
+```{r}
+# Potential outcomes example with hypothetical Lalonde data
+hypothetical_data <- data.frame(
+  Individual = 1:3,
+  Y1 = c(5, 6, 8),  # Income if treated
+  Y0 = c(3, 6, 4)   # Income if not treated
+)
+
+# Calculate Individual Treatment Effects (ITE)
+hypothetical_data$ITE <- hypothetical_data$Y1 - hypothetical_data$Y0
+# Calculate Average Treatment Effect (ATE)
+ATE <- mean(hypothetical_data$ITE)
+hypothetical_data
+ATE
+
+```
+
+In causal inference language, we refer to the measures ITE and ATE that we calculated above as the *causal estimands.*
+
+**Causal Estimand** refers to the different between two potential outcomes, that is the outcome where a subject receives the treatment Y(1) and the subject that does not Y(1). In the exercise above, we calculate the Individual Treatment Effect (ITE) and the Average Treatment Effect (ATE) for a population.
+
+# Confounding and Selection Bias
+
+**Confounding** arises when a variable influences both the treatment and outcome, creating bias in estimating causal effects.
+
+**Selection bias** occurs when the treatment and control groups are not comparable due to systematic differences (e.g., motivation, socioeconomic status).
+
+Confounding and selection bias are particularly relevant in non-experimental settings, where true randomization is often impractical.
+
+For instance, in health studies, socioeconomic status (SES) can act as a confounder because it influences both health outcomes and access to treatment. Without controlling for SES, we risk incorrectly attributing health improvements to the treatment rather than underlying economic factors, leading to biased conclusions!
+
+## 🥊 Challenge 2: Identifying confounders in the Lalond Dataset
+
+-   Use the Lalonde dataset to show differences in pre-treatment characteristics between treated and untreated groups
+-   Plot these differences using `dplyr`
+
+💡 **Tip**: Look up the Lalonde dataset to find more information about the variables in the dataset and what information the survey holds. Find a variable (or variables) that show issues of confounding or selection bias. Explain why and plot your results showing treated vs. untreated group.
+
+```{r}
+library(dplyr)
+# Education level by treatment status
+ggplot(lalonde, aes(x = factor(treat), y = age)) +
+  geom_boxplot() +
+  labs(title = "Distribution of Age by Treatment Status", x = "Treatment Status", y = "Years of Age")
+
+
+```
+
+Answer: clear difference because age might be a confounder as it influences both the likelihood of participating in the job training program AND the outcome (post-program earnings)
+
+Implications for selection bias:
+
+The systematic difference in age between treated and control groups suggest selection bias, as certain age groups appear more likely to participate in the program.
+
+------------------------------------------------------------------------
+
+## Key Concept 2: SUTVA (Stable Unit Treatment Value Assumption)
+
+SUTVA requires **no interference** between units and **no hidden variations** in treatment.
+
+-   **No interference**: An individual's treatment does not affect another's outcome.
+-   **No hidden variation**: The treatment is consistent across all individuals.
+
+The SUTVA assumption is especially important in real-world studies where treatments can have spillover effects or may vary subtly across participants.
+
+For example, in educational research, students in the same classroom may indirectly benefit from a peer’s participation in a special program. SUTVA helps ensure that the causal effect measured is consistent across participants and isn’t inadvertently impacted by external influences.
+
+## 🥊 Challenge 3: Violations of SUTVA
+
+a.  Identify potential violations of SUTVA. Example scenarios:
+
+-   **Vaccination**: Immunity provides indirect benefits to others.
+
+```{r}
+
+```
+
+-   **Job Training**: Affects job availability, impacting others.
+
+```{r}
+
+```
+
+b.  Take a look at the following scenario:
+
+-   Each individual is assigned to either participate in a job training program (treatment) or not (control).
+
+-   The outcome we’re interested in is job readiness or income after the program.
+
+Consider the following:
+
+-   Treatment Status: Individuals are randomly assigned to either receive training (Treatment = 1) or not (Treatment = 0).
+
+-   Neighbor Influence: Each individual’s outcome could also be influenced if their "neighbor" (e.g., a friend or family member) received training, modeled by neighbors_treated.
+
+-   Outcome (Job Readiness Score):The outcome is calculated based on:
+
+    -   A base score of 10.
+
+    -   An increase of 3 points if the individual received training.
+
+    -   An additional 1.5 points if their neighbor received training.
+
+```{r}
+# Set seed for reproducibility
+set.seed(123)
+
+# Simulate 10 individuals in a community
+n <- 10
+treatment <- sample(c(0, 1), n, replace = TRUE)  # Randomly assign job training (1) or no training (0)
+
+# Assume each individual has a "friend" or "neighbor" who could be influenced by their training status
+# Here, the influence is simplified to mean the previous individual in the sequence
+neighbors_treated <- c(0, treatment[-n])  # Count if the previous person was in treatment
+
+# Outcome depends on whether the individual received training and if their "neighbor" received training
+# Outcome: post-program job readiness score (hypothetical)
+outcome <- 10 + 3 * treatment + 1.5 * neighbors_treated + rnorm(n, mean = 0, sd = 2)
+
+# Show results
+data <- data.frame(
+  Individual = 1:n,
+  Treatment_Status = ifelse(treatment == 1, "Received Training", "No Training"),
+  Neighbor_Treatment_Status = ifelse(neighbors_treated == 1, "Neighbor Trained", "Neighbor Not Trained"),
+  Job_Readiness_Score = round(outcome, 2)
+)
+
+# Display the simulated data
+print(data)
+
+```
+
+Does this illustrate a scenario where SUTVA does not hold? Explain.
+
+```{r}
+##answer here 
+
+#nterference occurs because participants might share valuable skills or job-seeking tips with their friends who are not in the program, which could improve the job outcomes for the control group.
+
+#No Interference is violated because one individual's treatment (job training) can affect their neighbor's job readiness score.
+
+#No Hidden Variations in Treatment could also be discussed if different individuals receive varying levels of support within the program, though this is not explicitly simulated here.
+
+```
+
+------------------------------------------------------------------------
+
+## Key Concept 3: Assignment Mechanism
+
+In observational studies, **assignment mechanisms** may introduce bias due to self-selection or confounding factors.
+
+The **assignment mechanism** determines who receives the treatment and who does not. It is crucial in causal inference because it affects the comparability of treatment and control groups.
+
+Types of assignment mechanisms:
+
+-   **Random Assignment:** Treatment is assigned randomly, helping to create comparable groups.
+
+-   **Quasi-Experimental:** Assignment is not random but may follow specfic rules (e.g., eligibility based on age or income, the draft)
+
+-   **Self-selection**: Individuals decide whether to participate, often leading to selection bias.
+
+## 🥊 Challenge 4: Simulating Random Assignment
+
+```{r}
+# Example random assignment simulation
+set.seed(123)
+n <- 20  # Number of participants
+assignment <- sample(c('Treatment', 'Control'), n, replace = TRUE)
+table(assignment)
+```
+
+------------------------------------------------------------------------
+
+# 🎬 Demo: Propensity Score Matching (PSM) to deal with issues of selection
+
+Propensity Score Matching (PSM) is a method used to control for confounding by balancing covariates across treatment and control groups in observational studies. By creating matched groups that share similar characteristics, PSM aims to mimic randomization, making it easier to attribute observed differences to the treatment itself rather than other factors. This approach is particularly useful when random assignment is not feasible.
+
+```{r}
+library(MatchIt)
+# Apply PSM on the Lalonde dataset
+psm_model <- matchit(treat ~ age + educ + race + re74 + re75, data = lalonde, method = 'nearest')
+summary(psm_model)
+plot(psm_model)
+```
+
+# Key Points
+
+-   Causal inference is essential in fields like public policy, healthcare, and economics, where data-driven decisions impact lives and require a solid understanding of causation.
+
+<!-- -->
+
+-   Valid causal conclusions rely on assumptions like SUTVA, ignorability, and positivity, which are crucial for accurate and reliable interpretations.
+
+<!-- -->
+
+-   Observational studies, unlike randomized experiments, may contain unobserved biases, meaning conclusions should be interpreted cautiously.
+
+<!-- -->
+
+-   Sensitivity analyses and robustness checks help assess the reliability of causal claims by identifying potential influences from unmeasured biases.
+
+<!-- -->
+
+-   Combining causal inference with machine learning offers new possibilities for accuracy and insight, transforming research that relies on large datasets and complex causal questions.
