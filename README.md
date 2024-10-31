@@ -55,7 +55,7 @@ If you do not have R installed and the materials loaded on your workshop by the 
 
 Some users may have to click the link twice if the materials do not load initially.
 
-The DataHub downloads this repository, along with any necessary packages, and allows you to run the materials in an RStudio instance on UC Berkeley's servers. No installation is needed from your end - you only need an internet browser and a CalNet ID to log in. By using the DataHub, you can save your work and come back to it at any time. When you want to return to your saved work, go straight to [DataHub](https://dlab.datahub.berkeley.edu), sign in, and click on the `R-Fundamentals` folder.
+The DataHub downloads this repository, along with any necessary packages, and allows you to run the materials in an RStudio instance on UC Berkeley's servers. No installation is needed from your end - you only need an internet browser and a CalNet ID to log in. By using the DataHub, you can save your work and come back to it at any time. When you want to return to your saved work, go straight to [DataHub](https://dlab.datahub.berkeley.edu), sign in, and click on the `R-Causal-Inference` folder.
 
 If you don't have a Berkeley CalNet ID, you can still run these lessons in the cloud, by clicking this button:
 
@@ -69,13 +69,11 @@ Now that you have all the required software and materials, you need to run the c
 
 1.  Launch the RStudio software.
 
-2.  Use the file navigator to find the R-Fundamentals folder you downloaded from Github. Open `R-Fundamentals.Rproj` by double clicking on the file.
+2.  Use the file navigator to find the R-Causal-Inference folder you downloaded from Github. Open `R-Causal-Inference.Rmd` in the "lessons folder" by double clicking on the file.
 
-3.  Open up the file corresponding to the part of the workshop you're attending (`Part1.Rmd`, `Part2.Rmd`, `Part3.Rmd`, `Part4.Rmd`) via the Files panel in RStudio.
+3.  Place your cursor on a given line and press `Command + Enter` (Mac) or `Control + Enter` (PC) to run an individual line of code.
 
-4.  Place your cursor on a given line and press `Command + Enter` (Mac) or `Control + Enter` (PC) to run an individual line of code.
-
-5.  The `solutions` folder contains the solutions to the challenge problems.
+4.  The `solutions` folder contains the solutions to the challenge problems.
 
 # Additional Resources
 
