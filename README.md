@@ -110,3 +110,4 @@ D-Lab offers a variety of R workshops, catered toward different levels of expert
 # Contributors
 
 - Jose Aveldanes
+- Tom van Nuenen
