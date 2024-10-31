@@ -74,7 +74,6 @@ This workshop aims to equip you with foundational skills in causal inference, he
 -   **Outcome**: Child education level (`child_education`).
 -   **Covariates**: Household income and neighborhood quality.
 
-
 ------------------------------------------------------------------------
 
 ## Key Concept 1: Potential Outcomes Framework
@@ -126,7 +125,14 @@ For instance, in health studies, socioeconomic status (SES) can act as a confoun
 💡 **Tip**: Look up the Lalonde dataset to find more information about the variables in the dataset and what information the survey holds. Find a variable (or variables) that show issues of confounding or selection bias. Explain why and plot your results showing treated vs. untreated group.
 
 ```{r}
+# install ggplot if needed
+# install.packages("ggplot2")
+```
+
+```{r}
 library(dplyr)
+library(ggplot2)
+
 # Education level by treatment status
 ggplot(lalonde, aes(x = factor(treat), y = age)) +
   geom_boxplot() +
